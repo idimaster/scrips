@@ -1,2 +1,2 @@
-# scrips
+# scripts
 Java scripts PoC
