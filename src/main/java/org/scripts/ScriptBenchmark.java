@@ -55,7 +55,7 @@ public class ScriptBenchmark {
     }};
 
     private static String code = "count = 0; " +
-            "sum = 0; " +
+            "sum = 0.0; " +
             "foreach(account : accounts) { " +
             "  if(account.type == 'Checking') { " +
             "    count++;" +
@@ -80,7 +80,7 @@ public class ScriptBenchmark {
         Double output = (Double) MVEL.executeExpression(expression, vars);
     }
 
-    @Benchmark
+    //@Benchmark
     public void JavaScriptTestFindCheckingAverage() throws Exception {
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
         Invocable invocable = (Invocable) engine;
@@ -103,7 +103,7 @@ public class ScriptBenchmark {
 
     @Benchmark
     public void testMethod() {
-        int sum = 0;
+        double sum = 0.0;
         int count = 0;
         for(Account a : accounts) {
             if ("Checking".equals(a.getType())) {
@@ -111,6 +111,6 @@ public class ScriptBenchmark {
                 count++;
             }
         }
-        double output = (double)sum / count;
+        double output = sum / count;
     }
 }
