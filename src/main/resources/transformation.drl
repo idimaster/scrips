@@ -1,0 +1,9 @@
+package org.scripts.drools;
+
+rule "Email transformation"
+
+when
+    $item : EvaluationItem(key == "email")
+then
+    System.out.println($item.getValue());
+end
