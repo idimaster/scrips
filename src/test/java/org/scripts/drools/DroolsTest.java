@@ -23,12 +23,15 @@ public class DroolsTest {
 
     @Test
     public void evaluate() throws Exception {
+        Drools drools = new Drools();
+        drools.init(rule);
+
         List<EvaluationItem> items = new ArrayList<>();
         items.add(new EvaluationItem("email", "test@gmail.com", ""));
         items.add(new EvaluationItem("email", "tes.t@gmail.com", ""));
         items.add(new EvaluationItem("email", "te(s).t@gmail.com", ""));
         items.add(new EvaluationItem("email", "te+s.t@gmail.com", ""));
         EvaluationContext context = new EvaluationContext("test", "p1", items);
-        Drools.evaluate(rule, context);
+        drools.evaluate(context);
     }
 }
