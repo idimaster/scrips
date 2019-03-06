@@ -32,7 +32,7 @@ public class TransformationBenchmark {
 
     @Benchmark
     @BenchmarkMode({Mode.Throughput, Mode.AverageTime, Mode.SampleTime})
-    @OutputTimeUnit(TimeUnit.MICROSECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void DroolsTransform() throws Exception {
         List<EvaluationItem> items = new ArrayList<>();
         items.add(new EvaluationItem("email", "tes{t}@gmail.com", "", false));
