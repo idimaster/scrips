@@ -9,17 +9,19 @@ import org.kie.api.runtime.ExecutionResults;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.StatelessKieSession;
 import org.kie.internal.command.CommandFactory;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.State;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Drools {
 
-    private KieServices kieServices;
-    private KieFileSystem kieFileSystem;
-    private KieContainer kieContainer;
+    private final KieServices kieServices;
+    private final KieFileSystem kieFileSystem;
+    private final KieContainer kieContainer;
 
-    public void init(String drl) {
+    public Drools(String drl) {
         kieServices = KieServices.Factory.get();
         kieFileSystem = kieServices.newKieFileSystem();
         kieFileSystem.write("src/main/resources/rule.drl", drl);

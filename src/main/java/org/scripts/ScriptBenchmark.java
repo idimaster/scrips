@@ -66,14 +66,14 @@ public class ScriptBenchmark {
 
     private static CompiledExpression expression = new ExpressionCompiler(code).compile();
 
-    @Benchmark
+    //@Benchmark
     public void MVELFindCheckingAverage() {
         Map vars = new HashMap();
         vars.put("accounts", accounts);
         Double output = (Double) MVEL.eval(code, vars);
     }
 
-    @Benchmark
+    //@Benchmark
     public void MVELCompiledFindCheckingAverage() {
         Map vars = new HashMap();
         vars.put("accounts", accounts);
@@ -101,7 +101,7 @@ public class ScriptBenchmark {
         Double output = (Double) invocable.invokeFunction("average", accounts);
     }
 
-    @Benchmark
+    //@Benchmark
     public void testMethod() {
         double sum = 0.0;
         int count = 0;

@@ -2,9 +2,7 @@ package org.scripts;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.*;
 import org.scripts.drools.Drools;
 import org.scripts.drools.EvaluationContext;
 import org.scripts.drools.EvaluationItem;
@@ -17,14 +15,14 @@ import java.util.List;
 @State(Scope.Thread)
 public class TransformationBenchmark {
 
-    private Drools drools;
+    Drools drools;
 
-    {
+    @Setup
+    public void prepare() {
         try {
             URL url = Resources.getResource("transformation.drl");
             String rule = Resources.toString(url, Charsets.UTF_8);
-            drools = new Drools();
-            drools.init(rule);
+            drools = new Drools(rule);
         }
         catch (IOException e) {
             throw new ExceptionInInitializerError(e);
@@ -32,7 +30,8 @@ public class TransformationBenchmark {
     }
 
     @Benchmark
-    public void DroolsTrasform() throws Exception {
+    @Fork(0)
+    public void DroolsTransform() throws Exception {
         List<EvaluationItem> items = new ArrayList<>();
         items.add(new EvaluationItem("email", "tes{t}@gmail.com", "", false));
         items.add(new EvaluationItem("email", "tes.t@gmail.com", "", false));

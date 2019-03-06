@@ -23,8 +23,7 @@ public class DroolsTest {
 
     @Test
     public void evaluate() throws Exception {
-        Drools drools = new Drools();
-        drools.init(rule);
+        Drools drools = new Drools(rule);
 
         List<EvaluationItem> items = new ArrayList<>();
         items.add(new EvaluationItem("email", "tes{t}@gmail.com", "", false));
