@@ -27,11 +27,15 @@ public class DroolsTest {
         drools.init(rule);
 
         List<EvaluationItem> items = new ArrayList<>();
-        items.add(new EvaluationItem("email", "test@gmail.com", ""));
-        items.add(new EvaluationItem("email", "tes.t@gmail.com", ""));
-        items.add(new EvaluationItem("email", "te(s).t@gmail.com", ""));
-        items.add(new EvaluationItem("email", "te+s.t@gmail.com", ""));
+        items.add(new EvaluationItem("email", "tes{t}@gmail.com", "", false));
+        items.add(new EvaluationItem("email", "tes.t@gmail.com", "", false));
+        items.add(new EvaluationItem("email", "te(s).t@gmail.com", "", false));
+        items.add(new EvaluationItem("email", "te+s.t@gmail.com", "", false));
         EvaluationContext context = new EvaluationContext("test", "p1", items);
-        drools.evaluate(context);
+        EvaluationContext result = drools.evaluate(context);
+        assertEquals("TES@GMAIL.COM", result.getItems().get(0).getTransformed());
+        assertEquals("TEST@GMAIL.COM", result.getItems().get(1).getTransformed());
+        assertEquals("TET@GMAIL.COM", result.getItems().get(2).getTransformed());
+        assertEquals("TE@GMAIL.COM", result.getItems().get(3).getTransformed());
     }
 }

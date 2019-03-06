@@ -1,9 +1,45 @@
 package org.scripts.drools;
+dialect "mvel"
 
-rule "Email transformation"
+function String removeComments(String email) {
+    String result;
+    // remove comments
+    result = email.toUpperCase();
+    String[] parts = result.split("@");
+    String local = parts[0];
+    result = local.replaceAll("\\(.*\\)", "")
+        .replaceAll("\\{.*\\}", "")
+        .replaceAll("\\+.*$", "")
+        .replace(".", "");
+    return result + "@" + parts[1];
+}
+
+rule "Validate Email2" salience 100
 
 when
-    $item : EvaluationItem(key == "email")
+    $item : EvaluationItem(key == "email", value matches "^(?i).[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$")
 then
-    System.out.println($item.getValue());
+    modify($item){ valid = true };
+    //System.out.println($item.value);
+    //System.out.println("valid2");
+end
+
+rule "Validate Email" salience 100
+
+when
+    $item : EvaluationItem(key == "email", value matches "^.+@.+$")
+then
+    modify($item){ valid = true }
+    //System.out.println($item.value);
+    //System.out.println("valid");
+end
+
+rule "Email Transformation" salience 10
+
+when
+    $item : EvaluationItem(key == "email", valid == Boolean.TRUE)
+then
+    modify($item){ transformed = removeComments($item.value) };
+    //System.out.println($item.value);
+    //System.out.println($item.transformed);
 end
