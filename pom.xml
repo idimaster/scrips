@@ -74,7 +74,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
         </dependency>
         <dependency>
             <groupId>org.drools</groupId>
-            <artifactId>drools-templates</artifactId>
+            <artifactId>drools-compiler</artifactId>
             <version>${drools.version}</version>
         </dependency>
         <dependency>
