@@ -30,7 +30,6 @@ public class TransformationBenchmark {
     }
 
     @Benchmark
-    @Fork(0)
     public void DroolsTransform() throws Exception {
         List<EvaluationItem> items = new ArrayList<>();
         items.add(new EvaluationItem("email", "tes{t}@gmail.com", "", false));

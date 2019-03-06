@@ -1,7 +1,6 @@
 package org.scripts.drools;
 
 import org.drools.core.ClassObjectFilter;
-import org.drools.core.impl.StatelessKnowledgeSessionImpl;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieFileSystem;
 import org.kie.api.command.Command;
@@ -9,8 +8,6 @@ import org.kie.api.runtime.ExecutionResults;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.StatelessKieSession;
 import org.kie.internal.command.CommandFactory;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.State;
 
 import java.util.ArrayList;
 import java.util.List;
