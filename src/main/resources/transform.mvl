@@ -1,0 +1,18 @@
+def removeComments(email) {
+    result = email.toUpperCase();
+    parts = result.split("@");
+    local = parts[0];
+    result = local.replaceAll("\\(.*\\)", "")
+            .replaceAll("\\{.*\\}", "")
+            .replaceAll("\\+.*$", "")
+            .replace(".", "");
+    result + "@" + parts[1];
+}
+
+foreach(item : context.items) {
+    if (item.key == 'email') {
+        item.transformed = removeComments(item.value)
+    }
+}
+
+context
