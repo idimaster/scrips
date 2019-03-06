@@ -31,7 +31,7 @@ public class TransformationBenchmark {
     }
 
     @Benchmark
-    @BenchmarkMode({Mode.Throughput, Mode.AverageTime, Mode.SampleTime})
+    @BenchmarkMode({Mode.AverageTime, Mode.SampleTime})
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void DroolsTransform() throws Exception {
         List<EvaluationItem> items = new ArrayList<>();
