@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @State(Scope.Thread)
 public class TransformationBenchmark {
@@ -30,6 +31,8 @@ public class TransformationBenchmark {
     }
 
     @Benchmark
+    @BenchmarkMode({Mode.Throughput, Mode.AverageTime, Mode.SampleTime})
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
     public void DroolsTransform() throws Exception {
         List<EvaluationItem> items = new ArrayList<>();
         items.add(new EvaluationItem("email", "tes{t}@gmail.com", "", false));
