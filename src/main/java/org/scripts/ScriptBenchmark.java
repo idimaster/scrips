@@ -67,7 +67,7 @@ public class ScriptBenchmark {
     String statement = "function average(accounts) {" +
             " var sum = 0.0;" +
             " var count = 0;" +
-            " for each(account in accounts) { " +
+            " for each (var account in accounts) { " +
             "   if(account.getType() === 'Checking') { " +
             "     sum += account.getBalance();" +
             "     count++;" +
@@ -118,7 +118,7 @@ public class ScriptBenchmark {
     }
 
     @Benchmark
-    public void testMethod() {
+    public void JavaFindCheckingAverage() {
         double sum = 0.0;
         int count = 0;
         for(Account a : accounts) {

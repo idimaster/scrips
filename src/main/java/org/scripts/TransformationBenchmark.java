@@ -6,6 +6,7 @@ import org.openjdk.jmh.annotations.*;
 import org.scripts.drools.Drools;
 import org.scripts.drools.EvaluationContext;
 import org.scripts.drools.EvaluationItem;
+import org.scripts.js.JSTransform;
 import org.scripts.mvel.Transform;
 
 import java.io.IOException;
@@ -21,16 +22,22 @@ public class TransformationBenchmark {
 
     Drools drools;
     Transform transform;
+    JSTransform jsTransform;
 
     @Setup
-    public void prepare() {
+    public void prepare() throws Exception {
         try {
             URL url = Resources.getResource("transformation.drl");
             String rule = Resources.toString(url, Charsets.UTF_8);
             drools = new Drools(rule);
+
             url = Resources.getResource("transform.mvl");
             String script = Resources.toString(url, Charsets.UTF_8);
             transform = new Transform(script);
+
+            url = Resources.getResource("transform.js");
+            script = Resources.toString(url, Charsets.UTF_8);
+            jsTransform = new JSTransform(script);
         }
         catch (IOException e) {
             throw new ExceptionInInitializerError(e);
@@ -55,6 +62,11 @@ public class TransformationBenchmark {
     @Benchmark
     public void MVELTransform() {
         EvaluationContext result = transform.evaluate(createTestContext());
+    }
+
+    @Benchmark
+    public void JSTransform() throws Exception {
+        EvaluationContext result = jsTransform.evaluate(createTestContext());
     }
 
     @Benchmark
