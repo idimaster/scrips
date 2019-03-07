@@ -46,6 +46,8 @@ import org.mvel2.MVEL;
 
 
 @State(Scope.Thread)
+@BenchmarkMode({Mode.AverageTime, Mode.SampleTime})
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
 public class ScriptBenchmark {
 
     private List<Account> accounts;
@@ -96,30 +98,26 @@ public class ScriptBenchmark {
 
     }
 
-    @BenchmarkMode({Mode.AverageTime, Mode.SampleTime})
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    @Benchmark
     public void MVELFindCheckingAverage() {
         Map vars = new HashMap();
         vars.put("accounts", accounts);
         Double output = (Double) MVEL.eval(code, vars);
     }
 
-    @BenchmarkMode({Mode.AverageTime, Mode.SampleTime})
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    @Benchmark
     public void MVELCompiledFindCheckingAverage() {
         Map vars = new HashMap();
         vars.put("accounts", accounts);
         Double output = (Double) MVEL.executeExpression(expression, vars);
     }
 
-    @BenchmarkMode({Mode.AverageTime, Mode.SampleTime})
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    @Benchmark
     public void JavaScriptTestFindCheckingAverage() throws Exception {
         Double output = (Double) invocable.invokeFunction("average", accounts);
     }
 
-    @BenchmarkMode({Mode.AverageTime, Mode.SampleTime})
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    @Benchmark
     public void testMethod() {
         double sum = 0.0;
         int count = 0;

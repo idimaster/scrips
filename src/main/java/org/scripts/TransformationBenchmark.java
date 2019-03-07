@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @State(Scope.Thread)
+@BenchmarkMode({Mode.AverageTime, Mode.SampleTime})
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
 public class TransformationBenchmark {
 
     Drools drools;
@@ -46,16 +48,30 @@ public class TransformationBenchmark {
     }
 
     @Benchmark
-    @BenchmarkMode({Mode.AverageTime, Mode.SampleTime})
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void DroolsTransform() throws Exception {
         EvaluationContext result = drools.evaluate(createTestContext());
     }
 
     @Benchmark
-    @BenchmarkMode({Mode.AverageTime, Mode.SampleTime})
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void MVELTransform() {
         EvaluationContext result = transform.evaluate(createTestContext());
+    }
+
+    @Benchmark
+    public void JavaTransform() {
+        EvaluationContext context = createTestContext();
+        for(EvaluationItem item: context.getItems()) {
+            if ("email".equals(item.getKey())) {
+                // remove comments
+                String result = item.getValue().toUpperCase();
+                String[] parts = result.split("@");
+                String local = parts[0];
+                result = local.replaceAll("\\(.*\\)", "")
+                        .replaceAll("\\{.*\\}", "")
+                        .replaceAll("\\+.*$", "")
+                        .replace(".", "");
+                item.setTransformed(result + "@" + parts[1]);
+            }
+        }
     }
 }
