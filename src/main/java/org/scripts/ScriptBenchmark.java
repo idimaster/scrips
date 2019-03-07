@@ -33,27 +33,24 @@ package org.scripts;
 
 import org.mvel2.compiler.CompiledExpression;
 import org.mvel2.compiler.ExpressionCompiler;
-import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.*;
 
 import javax.script.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 import org.mvel2.MVEL;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.State;
 
 
 @State(Scope.Thread)
 public class ScriptBenchmark {
 
-    private List<Account> accounts = new ArrayList<Account>() {{
-        add(new Account(34, "Checking", "my"));
-        add(new Account(347, "Checking", "my"));
-        add(new Account(94, "Checking", "my"));
-    }};
+    private List<Account> accounts;
 
+    // MVEL variant
     private static String code = "count = 0; " +
             "sum = 0.0; " +
             "foreach(account : accounts) { " +
@@ -64,44 +61,65 @@ public class ScriptBenchmark {
             "} " +
             "return sum/count;";
 
-    private static CompiledExpression expression = new ExpressionCompiler(code).compile();
+    // JS variant
+    String statement = "function average(accounts) {" +
+            " var sum = 0.0;" +
+            " var count = 0;" +
+            " for each(account in accounts) { " +
+            "   if(account.getType() === 'Checking') { " +
+            "     sum += account.getBalance();" +
+            "     count++;" +
+            "    } " +
+            "  } " +
+            " return sum / count; " +
+            "} ";
 
-    //@Benchmark
+    private CompiledExpression expression;
+    private Invocable invocable;
+
+    @Setup
+    public void prepare() throws Exception {
+        // Compile MVEL expression
+        expression = new ExpressionCompiler(code).compile();
+
+        accounts = new ArrayList<Account>() {{
+            add(new Account(34, "Checking", "my"));
+            add(new Account(347, "Checking", "my"));
+            add(new Account(94, "Checking", "my"));
+        }};
+
+        // Setup JS engine
+        ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
+        invocable = (Invocable) engine;
+        CompiledScript cs = ((Compilable) engine).compile(statement);
+        cs.eval();
+
+    }
+
+    @BenchmarkMode({Mode.AverageTime, Mode.SampleTime})
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void MVELFindCheckingAverage() {
         Map vars = new HashMap();
         vars.put("accounts", accounts);
         Double output = (Double) MVEL.eval(code, vars);
     }
 
-    //@Benchmark
+    @BenchmarkMode({Mode.AverageTime, Mode.SampleTime})
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void MVELCompiledFindCheckingAverage() {
         Map vars = new HashMap();
         vars.put("accounts", accounts);
         Double output = (Double) MVEL.executeExpression(expression, vars);
     }
 
-    //@Benchmark
+    @BenchmarkMode({Mode.AverageTime, Mode.SampleTime})
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void JavaScriptTestFindCheckingAverage() throws Exception {
-        ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
-        Invocable invocable = (Invocable) engine;
-
-        String statement = "function average(accounts) {" +
-                " var sum = 0.0;" +
-                " var count = 0;" +
-                " for each(account in accounts) { " +
-                "   if(account.getType() === 'Checking') { " +
-                "     sum += account.getBalance();" +
-                "     count++;" +
-                "    } " +
-                "  } " +
-                " return sum / count; " +
-                "} ";
-        CompiledScript cs = ((Compilable) engine).compile(statement);
-        cs.eval();
         Double output = (Double) invocable.invokeFunction("average", accounts);
     }
 
-    //@Benchmark
+    @BenchmarkMode({Mode.AverageTime, Mode.SampleTime})
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void testMethod() {
         double sum = 0.0;
         int count = 0;
