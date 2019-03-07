@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 @State(Scope.Thread)
 @BenchmarkMode({Mode.AverageTime, Mode.SampleTime})
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@OutputTimeUnit(TimeUnit.MICROSECONDS)
 public class TransformationBenchmark {
 
     Drools drools;

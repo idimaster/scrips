@@ -47,7 +47,7 @@ import org.mvel2.MVEL;
 
 @State(Scope.Thread)
 @BenchmarkMode({Mode.AverageTime, Mode.SampleTime})
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@OutputTimeUnit(TimeUnit.MICROSECONDS)
 public class ScriptBenchmark {
 
     private List<Account> accounts;
