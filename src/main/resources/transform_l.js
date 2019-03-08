@@ -1,6 +1,6 @@
 function removeComments(email) {
     // remove comments
-    var result = email.toUpperCase()
+    var result = email.toLowerCase()
     var parts = result.split('@')
     var local = parts[0];
     result = local.replace('.', '')

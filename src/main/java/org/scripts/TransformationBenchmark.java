@@ -74,15 +74,18 @@ public class TransformationBenchmark {
         EvaluationContext context = createTestContext();
         for(EvaluationItem item: context.getItems()) {
             if ("email".equals(item.getKey())) {
-                // remove comments
-                String result = item.getValue().toUpperCase();
-                String[] parts = result.split("@");
-                String local = parts[0];
-                result = local.replaceAll("\\(.*\\)", "")
-                        .replaceAll("\\{.*\\}", "")
-                        .replaceAll("\\+.*$", "")
-                        .replace(".", "");
-                item.setTransformed(result + "@" + parts[1]);
+                if (item.getValue().matches("^.+@.+$")) {
+                    item.setValid(true);
+                    // remove comments
+                    String result = item.getValue().toUpperCase();
+                    String[] parts = result.split("@");
+                    String local = parts[0];
+                    result = local.replaceAll("\\(.*\\)", "")
+                            .replaceAll("\\{.*\\}", "")
+                            .replaceAll("\\+.*$", "")
+                            .replace(".", "");
+                    item.setTransformed(result + "@" + parts[1]);
+                }
             }
         }
     }

@@ -11,7 +11,10 @@ def removeComments(email) {
 
 foreach(item : context.items) {
     if (item.key == 'email') {
-        item.transformed = removeComments(item.value)
+        if (item.value.matches("^.+@.+$")) {
+            item.valid = true;
+            item.transformed = removeComments(item.value);
+        }
     }
 }
 

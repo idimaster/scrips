@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TransformTest {
     static private String script;
@@ -36,8 +37,12 @@ public class TransformTest {
         EvaluationContext result = transform.evaluate(context);
 
         assertEquals("TES@GMAIL.COM", result.getItems().get(0).getTransformed());
+        assertTrue(result.getItems().get(0).getValid());
         assertEquals("TEST@GMAIL.COM", result.getItems().get(1).getTransformed());
+        assertTrue(result.getItems().get(1).getValid());
         assertEquals("TET@GMAIL.COM", result.getItems().get(2).getTransformed());
+        assertTrue(result.getItems().get(2).getValid());
         assertEquals("TE@GMAIL.COM", result.getItems().get(3).getTransformed());
+        assertTrue(result.getItems().get(3).getValid());
     }
 }

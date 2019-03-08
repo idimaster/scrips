@@ -4,7 +4,7 @@ dialect "mvel"
 function String removeComments(String email) {
     String result;
     // remove comments
-    result = email.toUpperCase();
+    result = email.toLowerCase();
     String[] parts = result.split("@");
     String local = parts[0];
     result = local.replaceAll("\\(.*\\)", "")
